@@ -47,7 +47,7 @@ async function login(e){
 function logout(){
     firebase.auth().signOut()
     
-    document.querySelector('#proimg').src= "./assets/noimage.png"
+    document.querySelector('#proimg').src= "./assets/National_Institute_of_Technology,_Hamirpur_Logo.png"
 }
 
 const unsubscribe  = firebase.auth().onAuthStateChanged((user) => {
@@ -58,7 +58,7 @@ const unsubscribe  = firebase.auth().onAuthStateChanged((user) => {
       document.getElementById("signupli").style.display = "none"
       document.getElementById("logoutli").style.display = "block"
       getuserInfoRealtime(user)
-      if(user.uid=='TSS0ckznnpM2UkjxHIxp2Y8ivFc2'){
+      if(user.uid=='ZbOaFmRYTlTDhR2nf4GcouqrRuQ2'){
         allUserDetails()
       }
      
