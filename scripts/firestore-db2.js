@@ -119,6 +119,8 @@ async function allUserDetails() {
     const downloadButton = `<a href="${info.file_url}" download>Download</a>`;
     document.getElementById('tbody').innerHTML += `
       <tr>
+        <td>${info.name}</td>
+        <td>${info.email}</td>
         <td>${info.ambientT}</td>
         <td>${info.bodyT}</td>
         <td>${info.file_name}</td>
