@@ -13,6 +13,7 @@ async function signup(e){
         displayName: "User"
       })
       createUserCollection(result.user)
+      
       // await result.user.sendEmailVerification()
       M.toast({html:`welcome ${result.user.email}`,classes:"green"})
      console.log(result)  
@@ -47,7 +48,7 @@ async function login(e){
 function logout(){
     firebase.auth().signOut()
     
-    document.querySelector('#proimg').src= "./assets/National_Institute_of_Technology,_Hamirpur_Logo.png"
+    document.querySelector('#proimg').src= "./assets/noimage.png"
 }
 
 const unsubscribe  = firebase.auth().onAuthStateChanged((user) => {
@@ -89,12 +90,4 @@ async function loginWithGoogle(){
     }catch(err){
         console.log(err)
     }
-    
-  
 }
-
-
-
-
-
-
