@@ -1,42 +1,25 @@
 const userDetails = document.querySelector('.userDetails');
 const editProfile = document.querySelector('#editProfile');
 
-function createUserCollection(user) {
+function createUserCollection(user, downloadURL) {
   firebase.firestore().collection('users')
     .doc(user.email)
     .set({
       uid: user.uid,
       name: user.displayName,
+      age:"",
+      gender:"",
       email: user.email,
       ambientT: "",
       bodyT: "",
       file_name: "",
       file_url: "",
       hr: "",
-      spo2: ""
+      spo2: "",
+      phoneno:"",
+      clinicalHistory:"",
+      photoURL: downloadURL
     });
-}
-
-async function getuserInfo(user) {
-  if (user) {
-    const userInfoSnap = await firebase.firestore()
-      .collection('users')
-      .doc(userID.email)
-      .get();
-
-    const userInfo = userInfoSnap.data();
-    if (userInfo) {
-      userDetails.innerHTML = `
-        <h3>${userInfo.name}</h3>
-        <h3>${userInfo.email}</h3>
-        <h3>${userInfo.ambientT}</h3>
-      `;
-    }
-  } else {
-    userDetails.innerHTML = `
-      <h3>Please login</h3>
-    `;
-  }
 }
 
 async function getuserInfoRealtime(user) {
@@ -47,17 +30,65 @@ async function getuserInfoRealtime(user) {
         const userInfo = doc.data();
         if (userInfo) {
           userDetails.innerHTML = `
-            <ul class="collection">
-              <li class="collection-item">Ambient T - ${userInfo.ambientT}</li>
-              <li class="collection-item">Body T - ${userInfo.bodyT}</li>
-              <li class="collection-item">File Name - ${userInfo.file_name}</li>
-              <li class="collection-item">File URL - ${userInfo.file_url}</li>
-              <li class="collection-item">HR - ${userInfo.hr}</li>
-              <li class="collection-item">SPO2 - ${userInfo.spo2}</li>
-              <li class="collection-item">User ID - ${userInfo.user_id}</li>
-            </ul>
-            
+            <table class="highlight">
+              <tbody>
+                <tr>
+                  <td>Ambient T</td>
+                  <td>${userInfo.ambientT}</td>
+                </tr>
+                <tr>
+                  <td>Body T</td>
+                  <td>${userInfo.body}</td>
+                </tr>
+                <tr>
+                  <td>File Name</td>
+                  <td>${userInfo.file_name}</td>
+                </tr>
+                <tr>
+                  <td>File URL</td>
+                  <td><a href="${userInfo.file_url}" download>Download File</a></td>
+                </tr>
+                <tr>
+                  <td>HR</td>
+                  <td>${userInfo.hr}</td>
+                </tr>
+                <tr>
+                  <td>SPO2</td>
+                  <td>${userInfo.spo2}</td>
+                </tr>
+                <tr>
+                  <td>User ID</td>
+                  <td>${userInfo.user_id}</td>
+                </tr>
+                <tr>
+                  <td>Name</td>
+                  <td>${userInfo.name}</td>
+                </tr>
+                <tr>
+                  <td>Age</td>
+                  <td>${userInfo.age}</td>
+                </tr>
+                <tr>
+                  <td>Gender</td>
+                  <td>${userInfo.gender}</td>
+                </tr>
+                <tr>
+                  <td>Phone Number</td>
+                  <td>${userInfo.phoneno}</td>
+                </tr>
+                <tr>
+                  <td>Clinical History</td>
+                  <td>${userInfo.clinicalHistory}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn waves-effect #fbc02d yellow darken-2 modal-trigger" href="#modal3">Edit Details</button>
           `;
+          if (userInfo.photoURL) {
+            document.querySelector('#proimg').src = userInfo.photoURL;
+          } else {
+            document.querySelector('#proimg').src = './assets/noimage.png';
+          }
         }
       }
     });
@@ -68,28 +99,153 @@ async function getuserInfoRealtime(user) {
   }
 }
 
-function updateUserProfile(e) {
-  e.preventDefault();
+
+
+async function getuserInfoRealtime2(user) {
+  if (user) {
+    const userdocRef = await firebase.firestore().collection('users').doc(user.email);
+    userdocRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        const userInfo = doc.data();
+        if (userInfo) {
+          userDetails.innerHTML = `
+            <table class="highlight">
+              <tbody>
+                <tr>
+                  <td>Ambient T</td>
+                  <td>${userInfo.ambientT.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>Body T</td>
+                  <td>${userInfo.bodyT.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>File Name</td>
+                  <td>${userInfo.file_name}</td>
+                </tr>
+                <tr>
+                  <td>File URL</td>
+                  <td><a href="${userInfo.file_url}" download>Download File</a></td>
+                </tr>
+                <tr>
+                  <td>HR</td>
+                  <td>${userInfo.hr.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>SPO2</td>
+                  <td>${userInfo.spo2.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>User ID</td>
+                  <td>${userInfo.user_id}</td>
+                </tr>
+                <tr>
+                  <td>Name</td>
+                  <td>${userInfo.name}</td>
+                </tr>
+                <tr>
+                  <td>Age</td>
+                  <td>${userInfo.age}</td>
+                </tr>
+                <tr>
+                  <td>Gender</td>
+                  <td>${userInfo.gender}</td>
+                </tr>
+                <tr>
+                  <td>Phone Number</td>
+                  <td>${userInfo.phoneno}</td>
+                </tr>
+                <tr>
+                  <td>Clinical History</td>
+                  <td>${userInfo.clinicalHistory}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn waves-effect #fbc02d yellow darken-2 modal-trigger" href="#modal3">Edit Details</button>
+          `;
+          document.querySelector('#proimg').src = userInfo.photoURL;
+        }
+      }
+    });
+  } else {
+    userDetails.innerHTML = `
+      <h3>Please login</h3>
+    `;
+  }
+}
+
+
+
+function updateUserProfile2(event) {
+  event.preventDefault();
+
   const userDocRef = firebase.firestore()
     .collection('users')
-    .doc(firebase.auth().currentUser.uid.email);
+    .doc(firebase.auth().currentUser.email);
 
   userDocRef.update({
     name: editProfile["name"].value,
-    email: editProfile["profileEmail"].value,
-    phone: editProfile["phoneno"].value,
-    specialty: editProfile["specialty"].value,
-    portfolioUrl: editProfile["prorfolioUrl"].value,
-    experience: editProfile["experience"].value
+    age: editProfile["age"].value,
+    gender: editProfile["gender"].value,
+    phoneno: editProfile["phoneno"].value,
+    address: editProfile["address"].value,
+    clinicalHistory: editProfile["clinicalHistory"].value
   });
 
   M.Modal.getInstance(myModel[2]).close();
 }
 
+function updateUserProfile(event) {
+  event.preventDefault();
+
+  const userDocRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+  const name = editProfile['name'].value;
+  const age = editProfile['age'].value;
+  const gender = editProfile['gender'].value;
+  const phoneno = editProfile['phoneno'].value;
+  const address = editProfile['address'].value;
+  const clinicalHistory = editProfile['clinicalHistory'].value;
+
+  const updateData = {};
+
+  if (name !== '') {
+    updateData.name = name;
+  }
+
+  if (age !== '') {
+    updateData.age = age;
+  }
+
+  if (gender !== '') {
+    updateData.gender = gender;
+  }
+
+  if (phoneno !== '') {
+    updateData.phoneno = phoneno;
+  }
+
+  if (address !== '') {
+    updateData.address = address;
+  }
+
+  if (clinicalHistory !== '') {
+    updateData.clinicalHistory = clinicalHistory;
+  }
+
+  userDocRef.update(updateData);
+
+  M.Modal.getInstance(myModel[2]).close();
+}
+
+
+
 function uploadImage(e) {
   console.log(e.target.files[0]);
   const uid = firebase.auth().currentUser.uid;
-  const fileRef = firebase.storage().ref().child(`/users/${uid}/profile`);
+  const email2= firebase.auth().currentUser.email;
+  
+  const fileRef = firebase.storage().ref().child(`users/${email2}/${e.target.files[0].name}`);
+
   const uploadTask = fileRef.put(e.target.files[0]);
   uploadTask.on('state_changed',
     (snapshot) => {
@@ -106,11 +262,12 @@ function uploadImage(e) {
         firebase.auth().currentUser.updateProfile({
           photoURL: downloadURL
         });
+        const user = firebase.auth().currentUser;
+        createUserCollection(user, downloadURL);
       });
     }
   );
 }
-
 async function allUserDetails() {
   document.getElementById('table').style.display = 'table';
   const userRef = await firebase.firestore().collection('users').get();
@@ -121,13 +278,17 @@ async function allUserDetails() {
       <tr>
         <td>${info.name}</td>
         <td>${info.email}</td>
-        <td>${info.ambientT}</td>
-        <td>${info.bodyT}</td>
+        <td>${info.age}</td>
+        <td>${info.gender}</td>
+        <td>${info.phoneno}</td>
+        <td>${info.ambientT.toFixed(2)}</td>
+        <td>${info.bodyT.toFixed(2)}</td>
+        <td>${info.hr.toFixed(2)}</td>
+        <td>${info.spo2.toFixed(2)}</td>
+        <td>${info.clinicalHistory}</td>
         <td>${info.file_name}</td>
-        <td>${info.file_url}</td>
-        <td>${info.hr}</td>
-        <td>${info.spo2}</td>
-        
+        <!--<td>${info.file_url}</td>-->
+        <td>${downloadButton}</td>
       </tr>
     `;
   });
