@@ -10,12 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
   
-            
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ccc;
+      }
+      th, td {
+        text-align: left;
+        padding: 8px;
+      }
+    </style>
+           
 </head>
 <body>
     <nav>
         <div class="nav-wrapper #fbc02d yellow darken-2">
-          <a href="#" class="brand-logo">Healthcare </a>
+          <a href="#" class="brand-logo">Portable Data Acquistion </a>
           <ul id="nav-mobile" class="right">
             <li id="loginli"><a class="modal-trigger" href="#modal2">Login</a></li>
             <li  id="signupli"><a class="modal-trigger" href="#modal1">Signup</a></li>
@@ -65,14 +76,14 @@
           <input class="file-path validate" type="text">
         </div>
       </div>
-      <form autocomplete="off" id="editProfile" onsubmit="updateUserProfile(event)">
-        <input type="email" name="profileEmail" placeholder="email" />
+     <form autocomplete="off" id="editProfile" onsubmit="updateUserProfile(event)">
         <input type="text" name="name" placeholder="name" />
-        <input type="text" name="phoneno" placeholder="phoneno" />
-        <input type="text" name="specialty" placeholder="speciality" />
-        <input type="text" name="prorfolioUrl" placeholder="protfolio url" />
-        <input type="text" name="experience" placeholder="experience" />
-
+        <input type="number" name="age" placeholder="age" />
+        <input type="text" name="gender" placeholder="Gender = M/F/O" />
+        <input type="number" name="phoneno" placeholder="phoneno" />
+        <textarea name="address" placeholder="Enter your address"></textarea>
+        <textarea name="clinicalHistory" placeholder="Enter your clinical history"></textarea>
+        
         <button class="btn waves-effect #fbc02d yellow darken-2" type="submit">submit</button>   
       </form>
   
@@ -83,7 +94,7 @@
 
 
   <div class="center">
-    <h4>Portable Physiological Data Acquisition And Disease Diagnosis System</h4>
+    <h2>Portable Physiological Data Acquisition And Disease Diagnosis System</h2>
     <img id="proimg" class="circle" src="./assets/National_Institute_of_Technology,_Hamirpur_Logo.png" alt="noimage" style="width: 20%;height: auto;" />
     <div class="userDetails"></div>
   </div>
@@ -93,12 +104,17 @@
       <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Ambient T</th>
-          <th>Body T</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Contact No</th>
+          <th>Ambient <br> Temperature<br>(in C) </th>
+          <th>Body <br>Temperature<br>(in F)</th>
+          <th>HR<br>(in bpm)</th>
+          <th>SPO2<br>(in %)</th>
+          <th>Clinical<br>History</th>
           <th>File Name</th>
-          <th>File Url</th>
-          <th>HR</th>
-          <th>SPO2</th>
+          <th>Download <be>Record</be></th>
+          
       </tr>
     </thead>
 
