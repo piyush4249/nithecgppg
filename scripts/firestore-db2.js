@@ -98,9 +98,6 @@ async function getuserInfoRealtime(user) {
     `;
   }
 }
-
-
-
 async function getuserInfoRealtime2(user) {
   if (user) {
     const userdocRef = await firebase.firestore().collection('users').doc(user.email);
@@ -176,26 +173,8 @@ async function getuserInfoRealtime2(user) {
 
 
 
+
 function updateUserProfile2(event) {
-  event.preventDefault();
-
-  const userDocRef = firebase.firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.email);
-
-  userDocRef.update({
-    name: editProfile["name"].value,
-    age: editProfile["age"].value,
-    gender: editProfile["gender"].value,
-    phoneno: editProfile["phoneno"].value,
-    address: editProfile["address"].value,
-    clinicalHistory: editProfile["clinicalHistory"].value
-  });
-
-  M.Modal.getInstance(myModel[2]).close();
-}
-
-function updateUserProfile(event) {
   event.preventDefault();
 
   const userDocRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
@@ -263,7 +242,7 @@ function uploadImage(e) {
           photoURL: downloadURL
         });
         const user = firebase.auth().currentUser;
-        createUserCollection(user, downloadURL);
+        
       });
     }
   );
@@ -292,4 +271,65 @@ async function allUserDetails() {
       </tr>
     `;
   });
+}
+async function updateUserProfile(event) {
+  event.preventDefault();
+
+  const userDocRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+
+  // Fetch the current user document
+  const doc = await userDocRef.get();
+  const existingData = doc.data();
+
+  const name = editProfile['name'].value;
+  const age = editProfile['age'].value;
+  const gender = editProfile['gender'].value;
+  const phoneno = editProfile['phoneno'].value;
+  const address = editProfile['address'].value;
+  const clinicalHistory = editProfile['clinicalHistory'].value;
+  
+
+  const updateData = {};
+
+  // Merge existing data with updated fields
+ 
+  if (name !== '') {
+    updateData.name = name;
+  } else {
+    updateData.name = existingData.name; // Preserve existing value
+  }
+
+  if (age !== '') {
+    updateData.age = age;
+  } else {
+    updateData.age = existingData.age; // Preserve existing value
+  }
+
+  if (gender !== '') {
+    updateData.gender = gender;
+  } else {
+    updateData.gender = existingData.gender; // Preserve existing value
+  }
+
+  if (phoneno !== '') {
+    updateData.phoneno = phoneno;
+  } else {
+    updateData.phoneno = existingData.phoneno; // Preserve existing value
+  }
+
+  if (address !== '') {
+    updateData.address = address;
+  } else {
+    updateData.address = existingData.address; // Preserve existing value
+  }
+
+  if (clinicalHistory !== '') {
+    updateData.clinicalHistory = clinicalHistory;
+  } else {
+    updateData.clinicalHistory = existingData.clinicalHistory; // Preserve existing value
+  }
+
+  userDocRef.update(updateData);
+
+  M.Modal.getInstance(myModel[2]).close();
 }
